@@ -9,7 +9,6 @@ import com.google.gson.JsonParser
 import com.google.gson.annotations.SerializedName
 
 
-
 data class StockQuote(
     @SerializedName("quote_date") val date: String,
     val paper: String,
@@ -37,7 +36,6 @@ fun calculateHighestReturn(quotes: List<StockQuote>): Pair<StockQuote, StockQuot
     var highestSell = quotes.first()
     var bestBuySellTuple = Pair(quotes.first(), quotes.first())
 
-
     val tail = quotes.asSequence().drop(1)
 
     for (current in tail) {
@@ -58,12 +56,12 @@ fun calculateHighestReturn(quotes: List<StockQuote>): Pair<StockQuote, StockQuot
     return bestBuySellTuple
 }
 
+
 fun main(args: Array<String>) {
 
     // A User-Agent seems to be required by the web server
     // otherwise the http GET yields 403 Forbidden
     FuelManager.instance.baseHeaders = mapOf("User-Agent" to "mf_puzzle/1.0")
-
 
     val url = "http://www.modularfinance.se/api/puzzles/index-trader.json"
 
@@ -79,8 +77,7 @@ fun main(args: Array<String>) {
     val result = body
             .flatMap(::parseQuotesFromJson)
             .map(::calculateHighestReturn)
-
-
+    
     result.fold(
             { (buy, sell) ->
                 println("Buy at date: " + buy.date + " for: " + buy.low)
